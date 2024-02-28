@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import NavLinks from './NavLinks';
 
 const links = [
     { url: '/', title: 'Home' },
@@ -13,7 +14,7 @@ const links = [
 export default function Navbar() {
     const [open, setOpen] = useState(false);
     return (
-        <div className='h-full flex justify-between items-center px-4 sm:px-8 md:px-12 lg:px-20 xl:px-48'>
+        <div className='h-full flex justify-between items-center px-4 sm:px-8 md:px-12 lg:px-20 xl:px-48 text-xl'>
             {/* LOGO */}
             <div className=''>
                 <Link
@@ -28,12 +29,10 @@ export default function Navbar() {
             </div>
             <div className='hidden md:flex gap-4'>
                 {links.map((link) => (
-                    <Link
+                    <NavLinks
                         key={link.title}
-                        href={link.url}
-                    >
-                        {link.title}
-                    </Link>
+                        link={link}
+                    />
                 ))}
             </div>
 
