@@ -1,10 +1,36 @@
 'use client';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import emailjs from '@emailjs/browser';
+
 export default function Contact() {
     const text = 'Say Hello';
     const [success, setSuccess] = useState(false);
     const [error, setError] = useState(false);
+    const form = useRef();
+
+    const sendEmail = (e) => {
+        e.preventDefault();
+        setError(false);
+        setSuccess(false);
+
+        emailjs
+            .sendForm(
+                process.env.NEXT_PUBLIC_SERVICE_ID,
+                process.env.NEXT_PUBLIC_TEMPLATE_ID,
+                form.current,
+                process.env.NEXT_PUBLIC_PUBLIC_KEY
+            )
+            .then(
+                () => {
+                    setSuccess(true);
+                    form.current.reset();
+                },
+                () => {
+                    setError(true);
+                }
+            );
+    };
     return (
         <motion.div
             className='h-full'
@@ -30,16 +56,19 @@ export default function Contact() {
                 </div>
 
                 <form
-                    action=''
+                    ref={form}
+                    onSubmit={sendEmail}
                     className='h-1/2 lg:h-full lg:w-1/2 bg-red-50 rounded-xl text-xl flex flex-col gap-8 justify-center p-24'
                 >
                     <span>Dear Dev,</span>
                     <textarea
                         rows={6}
                         className='bg-transparent border-b-2 border-b-black outline-none resize-none'
+                        name='user_message'
                     />
                     <span>My mail address is:</span>
                     <input
+                        name='user_email'
                         type='text'
                         className='bg-transparent border-b-2 border-b-black outline-none '
                     />
